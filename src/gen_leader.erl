@@ -1436,17 +1436,15 @@ hasBecomeLeader(E,Server,Msg) ->
 %%%
 incarnation(VarDir, RegName, Node) ->
     Name = filename:join(VarDir, atom_to_list(RegName) ++ "_" ++ atom_to_list(Node)),
-    case file:read_file_info(Name) of
+    Incarn = case file:read_file_info(Name) of
         {error,_Reason} ->
-            ok = file:write_file(Name,term_to_binary(1)),
             0;
         {ok,_} ->
             {ok,Bin} = file:read_file(Name),
-            Incarn = binary_to_term(Bin),
-            ok = file:write_file(Name,term_to_binary(Incarn+1)),
-            Incarn
-    end.
-
+            binary_to_term(Bin)
+    end,
+    ok = file:write_file(Name,term_to_binary(Incarn+1)),
+    Incarn.
 
 broadcast(Msg, #election{monitored = Monitored} = E) ->
     %% This function is used for broadcasts,
