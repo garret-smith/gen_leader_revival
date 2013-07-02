@@ -1436,11 +1436,10 @@ hasBecomeLeader(E,Server,Msg) ->
 %%%
 incarnation(VarDir, RegName, Node) ->
     Name = filename:join(VarDir, atom_to_list(RegName) ++ "_" ++ atom_to_list(Node)),
-    Incarn = case file:read_file_info(Name) of
-        {error,_Reason} ->
+    Incarn = case file:read_file(Name) of
+        {error,_Reason} -> % usually enoent
             0;
-        {ok,_} ->
-            {ok,Bin} = file:read_file(Name),
+        {ok, Bin} ->
             binary_to_term(Bin)
     end,
     ok = file:write_file(Name,term_to_binary(Incarn+1)),
