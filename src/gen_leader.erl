@@ -1316,7 +1316,8 @@ format_status(Opt, StatusData) ->
     [{header, Header},
      {data, [{"Status", SysState},
              {"Parent", Parent},
-             {"Logged events", Log}]} |
+             {"Logged events", Log},
+			 {"Election", E}]} |
      Specific].
 
 
