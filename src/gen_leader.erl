@@ -1440,7 +1440,7 @@ incarnation(VarDir, RegName, Node) ->
         {ok, Bin} = file:read_file(Name),
         binary_to_term(Bin)
     catch
-        _ ->
+        _:_ ->
             0
     end,
     ok = file:write_file(Name,term_to_binary(Incarn+1)),
